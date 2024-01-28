@@ -11,7 +11,15 @@ namespace JobAppSystem.Areas.Identity.Data;
 public class Perdoruesi : IdentityUser
 {
     [PersonalData]
-    [Column(TypeName ="nvarchar(100)")]
+    [Column(TypeName = "nvarchar(100)")]
+    public string FirstName { get; set; }
+
+    [PersonalData]
+    [Column(TypeName = "nvarchar(100)")]
+    public string LastName { get; set; }
+
+    [PersonalData]
+    [Column(TypeName = "nvarchar(100)")]
     public string Emri { get; set; }
 
     [PersonalData]
