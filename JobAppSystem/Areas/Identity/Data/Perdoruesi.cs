@@ -10,13 +10,6 @@ namespace JobAppSystem.Areas.Identity.Data;
 // Add profile data for application users by adding properties to the Perdoruesi class
 public class Perdoruesi : IdentityUser
 {
-    [PersonalData]
-    [Column(TypeName = "nvarchar(100)")]
-    public string FirstName { get; set; }
-
-    [PersonalData]
-    [Column(TypeName = "nvarchar(100)")]
-    public string LastName { get; set; }
 
     [PersonalData]
     [Column(TypeName = "nvarchar(100)")]
@@ -25,5 +18,13 @@ public class Perdoruesi : IdentityUser
     [PersonalData]
     [Column(TypeName = "nvarchar(100)")]
     public string Mbiemri { get; set; }
+
+    [PersonalData]
+    [Column(TypeName = "nvarchar(100)")]
+    public string Qyteti { get; set; }
+
+    [PersonalData]
+    [Column(TypeName = "nvarchar(100)")]
+    public string NrTelefonit { get; set; }
 }
 
