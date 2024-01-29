@@ -71,22 +71,18 @@ namespace JobAppSystem.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            [Required]
+           
             [Display(Name = "Emri")]
             public string Emri { get; set; }
 
-            [Required]
             [Display(Name = "Mbiemri")]
             public string Mbiemri { get; set; }
 
-            [Required]
             [Display(Name = "Qyteti")]
             public string Qyteti { get; set; }
 
-            [Required]
-            [Phone]
-            [Display(Name = "NrTelefonit")]
-            public string NrTelefonit { get; set; }
+            [Display(Name = "PhoneNumber")]
+            public string PhoneNumber { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -131,6 +127,10 @@ namespace JobAppSystem.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
+                user.Emri = Input.Emri;
+                user.Mbiemri = Input.Mbiemri;
+                user.Qyteti = Input.Qyteti;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

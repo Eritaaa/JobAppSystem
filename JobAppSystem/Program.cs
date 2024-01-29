@@ -8,11 +8,16 @@ var connectionString = builder.Configuration.GetConnectionString("JobAppSystemDb
 
 builder.Services.AddDbContext<JobAppSystemDbContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<Perdoruesi>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<JobAppSystemDbContext>();
+builder.Services.AddDefaultIdentity<Perdoruesi>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<JobAppSystemDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireUppercase = false;
+});
 
 var app = builder.Build();
 

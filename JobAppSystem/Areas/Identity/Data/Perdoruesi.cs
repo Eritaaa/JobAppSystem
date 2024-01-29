@@ -25,6 +25,6 @@ public class Perdoruesi : IdentityUser
 
     [PersonalData]
     [Column(TypeName = "nvarchar(100)")]
-    public string NrTelefonit { get; set; }
+    public string PhoneNumber { get; set; }
 }
 
