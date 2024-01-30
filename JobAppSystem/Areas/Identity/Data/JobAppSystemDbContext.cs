@@ -1,4 +1,5 @@
 ﻿using JobAppSystem.Areas.Identity.Data;
+using JobAppSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,10 @@ namespace JobAppSystem.Data;
 
 public class JobAppSystemDbContext : IdentityDbContext<Perdoruesi>
 {
-    public JobAppSystemDbContext(DbContextOptions<JobAppSystemDbContext> options)
-        : base(options)
+    public JobAppSystemDbContext(DbContextOptions<JobAppSystemDbContext> options) : base(options)
     {
     }
-
+    public DbSet<Konkursi> Konkurset { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<JobAppSystem.Models.Konkursi>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Konkurset e hapura</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulli)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pozicioni)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EksperiencaENevojshme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataEHapjes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataEMbylljes)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titulli)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pozicioni)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EksperiencaENevojshme)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataEHapjes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataEMbylljes)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.KonkursiId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.KonkursiId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.KonkursiId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
