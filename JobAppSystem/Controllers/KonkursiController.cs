@@ -112,6 +112,43 @@ namespace JobAppSystem.Controllers
             return View(konkursi);
         }
 
+        // GET: Konkursi/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Konkurset == null)
+            {
+                return NotFound();
+            }
+
+            var konkursi = await _context.Konkurset
+                .FirstOrDefaultAsync(m => m.KonkursiId == id);
+            if (konkursi == null)
+            {
+                return NotFound();
+            }
+
+            return View(konkursi);
+        }
+
+        // POST: Konkursi/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.Konkurset == null)
+            {
+                return Problem("Entity set 'JobAppSystemDbContext.Konkurset'  is null.");
+            }
+            var konkursi = await _context.Konkurset.FindAsync(id);
+            if (konkursi != null)
+            {
+                _context.Konkurset.Remove(konkursi);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool KonkursiExists(int id)
         {
             return (_context.Konkurset?.Any(e => e.KonkursiId == id)).GetValueOrDefault();
