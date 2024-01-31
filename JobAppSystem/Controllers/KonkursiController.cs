@@ -60,5 +60,61 @@ namespace JobAppSystem.Controllers
             }
             return View(konkursi);
         }
+
+        // GET: Konkursi/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Konkurset == null)
+            {
+                return NotFound();
+            }
+
+            var konkursi = await _context.Konkurset.FindAsync(id);
+            if (konkursi == null)
+            {
+                return NotFound();
+            }
+            return View(konkursi);
+        }
+
+        // POST: Konkursi/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("KonkursiId,Titulli,Pozicioni,EksperiencaENevojshme,DataEHapjes,DataEMbylljes")] Konkursi konkursi)
+        {
+            if (id != konkursi.KonkursiId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(konkursi);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!KonkursiExists(konkursi.KonkursiId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(konkursi);
+        }
+
+        private bool KonkursiExists(int id)
+        {
+            return (_context.Konkurset?.Any(e => e.KonkursiId == id)).GetValueOrDefault();
+        }
     }
 }
