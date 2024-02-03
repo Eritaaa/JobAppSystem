@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JobAppSystem.Data;
 using JobAppSystem.Models;
@@ -12,31 +8,29 @@ namespace JobAppSystem.Controllers
 {
     public class KonkursiController : Controller
     {
-        private readonly JobAppSystemDbContext _context;
+        private readonly IKonkursiRepository _konkursiRepository;
 
-        public KonkursiController(JobAppSystemDbContext context)
+        public KonkursiController(IKonkursiRepository konkursiRepository)
         {
-            _context = context;
+            _konkursiRepository = konkursiRepository;
         }
 
         // GET: Konkursi
         public async Task<IActionResult> Index()
         {
-            return _context.Konkurset != null ?
-                        View(await _context.Konkurset.ToListAsync()) :
-                        Problem("Entity set 'JobAppSystemDbContext.Konkurset'  is null.");
+            var konkursit = await _konkursiRepository.GetAllKonkurset();
+            return View(konkursit);
         }
 
         // GET: Konkursi/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Konkurset == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var konkursi = await _context.Konkurset
-                .FirstOrDefaultAsync(m => m.KonkursiId == id);
+            var konkursi = await _konkursiRepository.GetKonkursiById(id.Value);
             if (konkursi == null)
             {
                 return NotFound();
@@ -45,17 +39,20 @@ namespace JobAppSystem.Controllers
             return View(konkursi);
         }
 
+        // GET: Konkursi/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         // POST: Konkursi/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("KonkursiId,Titulli,Pozicioni,EksperiencaENevojshme,DataEHapjes,DataEMbylljes")] Konkursi konkursi)
+        public async Task<IActionResult> Create([Bind("Titulli,Pozicioni,EksperiencaENevojshme,DataEHapjes,DataEMbylljes")] Konkursi konkursi)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(konkursi);
-                await _context.SaveChangesAsync();
+                await _konkursiRepository.AddKonkursi(konkursi);
                 return RedirectToAction(nameof(Index));
             }
             return View(konkursi);
@@ -64,12 +61,12 @@ namespace JobAppSystem.Controllers
         // GET: Konkursi/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Konkurset == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var konkursi = await _context.Konkurset.FindAsync(id);
+            var konkursi = await _konkursiRepository.GetKonkursiById(id.Value);
             if (konkursi == null)
             {
                 return NotFound();
@@ -78,8 +75,6 @@ namespace JobAppSystem.Controllers
         }
 
         // POST: Konkursi/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("KonkursiId,Titulli,Pozicioni,EksperiencaENevojshme,DataEHapjes,DataEMbylljes")] Konkursi konkursi)
@@ -93,12 +88,11 @@ namespace JobAppSystem.Controllers
             {
                 try
                 {
-                    _context.Update(konkursi);
-                    await _context.SaveChangesAsync();
+                    await _konkursiRepository.UpdateKonkursi(konkursi);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KonkursiExists(konkursi.KonkursiId))
+                    if (!_konkursiRepository.KonkursiExists(id))
                     {
                         return NotFound();
                     }
@@ -115,13 +109,12 @@ namespace JobAppSystem.Controllers
         // GET: Konkursi/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Konkurset == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var konkursi = await _context.Konkurset
-                .FirstOrDefaultAsync(m => m.KonkursiId == id);
+            var konkursi = await _konkursiRepository.GetKonkursiById(id.Value);
             if (konkursi == null)
             {
                 return NotFound();
@@ -135,23 +128,8 @@ namespace JobAppSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Konkurset == null)
-            {
-                return Problem("Entity set 'JobAppSystemDbContext.Konkurset'  is null.");
-            }
-            var konkursi = await _context.Konkurset.FindAsync(id);
-            if (konkursi != null)
-            {
-                _context.Konkurset.Remove(konkursi);
-            }
-
-            await _context.SaveChangesAsync();
+            await _konkursiRepository.DeleteKonkursi(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool KonkursiExists(int id)
-        {
-            return (_context.Konkurset?.Any(e => e.KonkursiId == id)).GetValueOrDefault();
         }
     }
 }
