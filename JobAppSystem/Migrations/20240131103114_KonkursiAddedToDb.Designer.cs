@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobAppSystem.Migrations
 {
     [DbContext(typeof(JobAppSystemDbContext))]
-    [Migration("20240129204844_AddedQytetiToUser")]
-    partial class AddedQytetiToUser
+    [Migration("20240131103114_KonkursiAddedToDb")]
+    partial class KonkursiAddedToDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -101,6 +101,38 @@ namespace JobAppSystem.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("JobAppSystem.Models.Konkursi", b =>
+                {
+                    b.Property<int>("KonkursiId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KonkursiId"));
+
+                    b.Property<DateTime>("DataEHapjes")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataEMbylljes")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EksperiencaENevojshme")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Pozicioni")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("varchar(100)");
+
+                    b.Property<string>("Titulli")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("nvarchar(250)");
+
+                    b.HasKey("KonkursiId");
+
+                    b.ToTable("Konkurset");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
