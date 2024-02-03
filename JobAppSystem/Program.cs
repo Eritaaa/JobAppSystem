@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using JobAppSystem.Data;
 using JobAppSystem.Areas.Identity.Data;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("JobAppSystemDbContextConnection") ?? throw new InvalidOperationException("Connection string 'JobAppSystemDbContextConnection' not found.");
@@ -10,14 +11,11 @@ builder.Services.AddDbContext<JobAppSystemDbContext>(options => options.UseSqlSe
 
 builder.Services.AddDefaultIdentity<Perdoruesi>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<JobAppSystemDbContext>();
 
+builder.Services.AddScoped<IKonkursiRepository, KonkursiRepository>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.Password.RequireUppercase = false;
-});
 
 var app = builder.Build();
 
@@ -35,6 +33,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-app.MapRazorPages(); 
+app.MapRazorPages();
 
 app.Run();
+
